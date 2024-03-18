@@ -1,0 +1,10 @@
+FROM node:20-bookworm
+
+RUN echo '#!/bin/bash \n\n\
+    alias ls="ls --color=auto" \n\
+    ' > /home/node/.bash_aliases
+
+WORKDIR /home/node
+USER node
+
+CMD ["/bin/bash"]
