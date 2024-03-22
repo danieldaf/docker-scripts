@@ -6,11 +6,11 @@ ARG UNAME=node
 
 RUN if [ "${UID}" = "1000" ] && [ "${GID}" = "1000" ] ; then \
         sed -i 's_node:x:1000:1000::/home/node:/bin/bash_node:x:2000:2000::/home/node:/bin/bash_' /etc/passwd && \
-        sed -i 's_node:x:1000:_node:x:2000:' /etc/group ; \
+        sed -i 's_node:x:1000:_node:x:2000:_' /etc/group ; \
     elif [ "${UID}" = "1000" ] ; then \
         sed -i 's_node:x:1000:1000::/home/node:/bin/bash_node:x:2000:1000::/home/node:/bin/bash_' /etc/passwd ; \
     elif [ "${GID}" = "1000" ]; then \
-        sed -i 's_node:x:1000:_node:x:2000:' /etc/group ; \
+        sed -i 's_node:x:1000:_node:x:2000:_' /etc/group ; \
     fi
 RUN groupadd -g ${GID} -o ${UNAME} && \
     useradd -m -u ${UID} -N -g ${GID} -o -s /bin/bash ${UNAME}

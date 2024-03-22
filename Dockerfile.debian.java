@@ -1,11 +1,11 @@
-FROM node:20-bookworm
+FROM debian:bookworm
 
 RUN DEBIAN_FRONTEND=noninteractive apt-get update --fix-missing
-RUN DEBIAN_FRONTEND=noninteractive apt-get -y install vim curl git tini sudo
+RUN DEBIAN_FRONTEND=noninteractive apt-get install -y tini openjdk-17-jdk-headless sudo
 
 ARG UID=1000
 ARG GID=1000
-ARG UNAME=node
+ARG UNAME=develop
 
 RUN if [ "${UID}" = "1000" ] && [ "${GID}" = "1000" ] ; then \
         sed -i 's_node:x:1000:1000::/home/node:/bin/bash_node:x:2000:2000::/home/node:/bin/bash_' /etc/passwd && \
@@ -25,13 +25,9 @@ RUN echo '#!/bin/bash \n\n\
     alias ls="ls --color=auto" \n\
     ' > /home/${UNAME}/.bash_aliases
 
-RUN npm install -g @angular/cli@17.3.0
-
 RUN mkdir /home/${UNAME}/src
 WORKDIR /home/${UNAME}/src
 USER ${UNAME}
-
-EXPOSE 4200/tcp
 
 ENTRYPOINT ["tini", "--"]
 CMD ["/bin/bash"]
